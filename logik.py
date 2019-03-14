@@ -22,6 +22,7 @@ class Application(tk.Tk):
         self.barvy = "#c90000 #99dd00 #0000ff #ffff00 #008888 #880088 #dd9900 #ffffff".split()
         self.sirka = 30
         self.vyska = 20
+        self.aktradek = 9
         
         #skrytá pole
         self.skryteBarvy = []
@@ -32,7 +33,10 @@ class Application(tk.Tk):
             
         ### titulek
         self.lbltit = Label(self, text=u"Logik")
-        self.lbltit.grid(columnspan=5)
+        self.lbltit.grid(row = 1,column = 1,columnspan=5)
+        
+        self.lblskore = Label(self, text=u"Barva/Pozice")
+        self.lblskore.grid(row = 1,column = 6,columnspan=5)
         
         #pole s hádanou barvou
         self.hadaneBarvy = []
@@ -49,7 +53,7 @@ class Application(tk.Tk):
         odpovedProgramu = []
         for radek in range(10):
             lbl = Label(self, text='-/-')
-            lbl.grid(column=6, row= radek+2)
+            lbl.grid(column=8, row= radek+2)
             odpovedProgramu.append(lbl)
             
         #oddělovací čára
@@ -61,13 +65,14 @@ class Application(tk.Tk):
             for sloupec in range(5):
                 def akce(r=radek, s=sloupec):
                     self.click(r, s)
-                b = tk.Button(width=self.sirka, height=self.vyska, bg=barva, fg=barva, bitmap='gray12', activebackground=barva, activeforeground=barva, command=akce)
-                b.grid(row=radek+12,column=sloupec)
+                self.b = tk.Button(width=self.sirka, height=self.vyska, bg=barva, fg=barva, bitmap='gray12', activebackground=barva, activeforeground=barva, command=akce)
+                self.b.grid(row=radek+12,column=sloupec)
         
     
         self.bind("<Escape>",self.quit)
         
     def click(self, r, s):
+        self.hadaneBarvy[self.aktradek][s].config(bg=self.barvy[r])
         print(r, s)
         
     def quit(self, event=None):
