@@ -67,7 +67,10 @@ class Application(tk.Tk):
                     self.click(r, s)
                 self.b = tk.Button(width=self.sirka, height=self.vyska, bg=barva, fg=barva, bitmap='gray12', activebackground=barva, activeforeground=barva, command=akce)
                 self.b.grid(row=radek+12,column=sloupec)
-        
+                
+        #tlačítko Odeslat
+        self.tlcodes = tk.Button(self, text=u'Odeslat')
+        self.tlcodes.grid(row=13, column=6, columnspan=4)
     
         self.bind("<Escape>",self.quit)
         
