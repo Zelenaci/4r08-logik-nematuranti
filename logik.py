@@ -72,6 +72,10 @@ class Application(tk.Tk):
         self.tlcodes = tk.Button(self, text=u'Odeslat')
         self.tlcodes.grid(row=13, column=6, columnspan=4)
     
+        #tlačítko znovu
+        self.tlznov = Button(self,text = 'Znovu')
+        self.tlznov.grid(column= 6,row=14, columnspan = 4 )
+    
         self.bind("<Escape>",self.quit)
         
     def click(self, r, s):
