@@ -9,6 +9,7 @@ Created on Tue Mar  5 10:10:21 2019
 from os.path import basename, splitext
 import tkinter as tk
 from tkinter import Canvas, Label
+import random
 # from tkinter import ttk
 
 
@@ -23,6 +24,8 @@ class Application(tk.Tk):
         self.sirka = 30
         self.vyska = 20
         self.aktradek = 9
+        self.had=None
+        self.pokus=[None]*5
         
         #skrytá pole
         self.skryteBarvy = []
@@ -33,10 +36,10 @@ class Application(tk.Tk):
             
         ### titulek
         self.lbltit = Label(self, text=u"Logik")
-        self.lbltit.grid(row = 1,column = 1,columnspan=5)
+        self.lbltit.grid(columnspan=5, row=1)
         
-        self.lblskore = Label(self, text=u"Barva/Pozice")
-        self.lblskore.grid(row = 1,column = 6,columnspan=5)
+        self.lblbp = Label(self, text=u"Barva/Pozice")
+        self.lblbp.grid(columnspan=3, row=1, column=6)
         
         #pole s hádanou barvou
         self.hadaneBarvy = []
@@ -47,17 +50,16 @@ class Application(tk.Tk):
                 c.grid(column=sloupec,row=radek+2)
                 radekBarev.append(c)
             self.hadaneBarvy.append(radekBarev)
-        self.hadaneBarvy[1][4].config(background='magenta')
         
         #odpověď programu
-        odpovedProgramu = []
+        self.odpovedProgramu = []
         for radek in range(10):
             lbl = Label(self, text='-/-')
-            lbl.grid(column=8, row= radek+2)
-            odpovedProgramu.append(lbl)
+            lbl.grid(column=7, row= radek+2)
+            self.odpovedProgramu.append(lbl)
             
         #oddělovací čára
-        self.cancar = Canvas( background='#777',width=6*self.sirka, height=8)
+        self.cancar = Canvas( background='black',width=6*self.sirka, height=8)
         self.cancar.grid(column=0,row=12, columnspan=5)
         
         #tlačítka
@@ -65,22 +67,27 @@ class Application(tk.Tk):
             for sloupec in range(5):
                 def akce(r=radek, s=sloupec):
                     self.click(r, s)
-                self.b = tk.Button(width=self.sirka, height=self.vyska, bg=barva, fg=barva, bitmap='gray12', activebackground=barva, activeforeground=barva, command=akce)
-                self.b.grid(row=radek+12,column=sloupec)
-                
+                b = tk.Button(width=self.sirka, height=self.vyska, bg=barva, fg=barva, bitmap='gray12', activebackground=barva, activeforeground=barva, command=akce)
+                b.grid(row=radek+13,column=sloupec)
+        
+        #tlačítko Nová Hra
+        self.tlchra = tk.Button(self, text=u'Nová hra', command=self.generujHadanku)
+        self.tlchra.grid(row=13, column=6, columnspan=4)
+        
         #tlačítko Odeslat
-        self.tlcodes = tk.Button(self, text=u'Odeslat')
-        self.tlcodes.grid(row=13, column=6, columnspan=4)
+        self.tlcodes = tk.Button(self, text=u'Odeslat', command=self.odeslat)
+        self.tlcodes.grid(row=14, column=6, columnspan=4)
     
         #tlačítko znovu
-        self.tlznov = Button(self,text = 'Znovu')
-        self.tlznov.grid(column= 6,row=14, columnspan = 4 )
+        self.tlznov = tk.Button(self,text = 'Znovu', command=None)
+        self.tlznov.grid(column= 6,row=15, columnspan = 4 )
     
         self.bind("<Escape>",self.quit)
         
     def click(self, r, s):
         self.hadaneBarvy[self.aktradek][s].config(bg=self.barvy[r])
         print(r, s)
+
         
     def quit(self, event=None):
         super().quit()
