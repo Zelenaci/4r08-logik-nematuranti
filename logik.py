@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Mar  5 10:10:21 2019
-
-@author: lov35174
-"""
-
 from os.path import basename, splitext
 import tkinter as tk
 from tkinter import Canvas, Label
@@ -88,7 +80,35 @@ class Application(tk.Tk):
         self.hadaneBarvy[self.aktradek][s].config(bg=self.barvy[r])
         print(r, s)
 
-        
+    def odeslat(self):
+        spravnaBarva=0
+        spravnaPozice = 0
+        for i in range(len(self.pokus)):
+            if self.pokus[i]==self.had[i]:
+                spravnaPozice = spravnaPozice + 1
+            elif self.pokus[i] in self.had:
+                spravnaBarva = spravnaBarva + 1
+        self.odpovedProgramu[self.aktradek].config(text='{}/{}'.format(spravnaBarva,spravnaPozice))
+        ## konec hry
+        if self.aktradek==0 or spravnaPozice == 5:
+            self.odkryjHadanku()
+            self.tlacodes.config(state='disabled')
+        self.aktradek -=1
+    
+    def generujHadanku(self):
+        self.had = []
+        for _ in range(5):
+            while 1:
+                nahodnaBarva=self.barvy[random.randint(0,len(self.barvy)-1)]
+                if not nahodnaBarva in self.had:
+                    break
+            self.had.append(nahodnaBarva)
+        return self.had
+    
+    def odkryjHadanku(self):
+        for i,udelatko in enumerate(self.skryteBarvy):
+            udelatko.config(bg=self.had[i])
+    
     def quit(self, event=None):
         super().quit()
 
