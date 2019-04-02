@@ -79,6 +79,35 @@ class Application(tk.Tk):
     def click(self, r, s):
         self.hadaneBarvy[self.aktradek][s].config(bg=self.barvy[r])
         print(r, s)
+
+    def odeslat(self):
+        spravnaBarva=0
+        spravnaPozice = 0
+        for i in range(len(self.pokus)):
+            if self.pokus[i]==self.had[i]:
+                spravnaPozice = spravnaPozice + 1
+            elif self.pokus[i] in self.had:
+                spravnaBarva = spravnaBarva + 1
+        self.odpovedProgramu[self.aktradek].config(text='{}/{}'.format(spravnaBarva,spravnaPozice))
+        ## konec hry
+        if self.aktradek==0 or spravnaPozice == 5:
+            self.odkryjHadanku()
+            self.tlcodes.config(state='disabled')
+        self.aktradek -=1
+    
+    def generujHadanku(self):
+        self.had = []
+        for _ in range(5):
+            while 1:
+                nahodnaBarva=self.barvy[random.randint(0,len(self.barvy)-1)]
+                if not nahodnaBarva in self.had:
+                    break
+            self.had.append(nahodnaBarva)
+        return self.had
+    
+    def odkryjHadanku(self):
+        for i,udelatko in enumerate(self.skryteBarvy):
+            udelatko.config(bg=self.had[i])
     
     def quit(self, event=None):
         super().quit()
